@@ -1,128 +1,327 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Apache JMeter Tutorials | Performance Testing Guide</title>
-    <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; line-height: 1.6; color: #24292e; max-width: 900px; margin: 0 auto; padding: 2rem; background-color: #f6f8fa; }
-        header { border-bottom: 1px solid #e1e4e8; padding-bottom: 1rem; margin-bottom: 2rem; text-align: center; }
-        h1 { color: #0366d6; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
-        .card { background: white; border: 1px solid #e1e4e8; border-radius: 6px; padding: 1.5rem; transition: transform 0.2s, box-shadow 0.2s; }
-        .card:hover { transform: translateY(-5px); box-shadow: 0 8px 24px rgba(149,157,165,0.2); border-color: #0366d6; }
-        .card h3 { margin-top: 0; color: #0366d6; font-size: 1.2rem; }
-        .card p { font-size: 0.9rem; color: #586069; margin-bottom: 1rem; }
-        .card a { text-decoration: none; color: #ffffff; background-color: #0366d6; padding: 0.5rem 1rem; border-radius: 5px; font-size: 0.85rem; display: inline-block; }
-        .category-title { grid-column: 1 / -1; margin-top: 1rem; border-left: 4px solid #0366d6; padding-left: 10px; color: #24292e; }
-        footer { margin-top: 3rem; text-align: center; font-size: 0.8rem; color: #6a737d; border-top: 1px solid #e1e4e8; padding-top: 1rem; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Apache JMeter Tutorials — Performance Testing & Engineering</title>
+<meta name="description" content="A comprehensive collection of visual guides for mastering Apache JMeter and performance engineering — from fundamentals to advanced execution and analysis.">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#080B13;--bg-card:#101524;--bg-alt:#161C30;
+    --c1:#42A5F5;--c2:#66BB6A;--c3:#FFA726;--c4:#AB47BC;
+    --c1b:rgba(66,165,245,.06);--c1d:rgba(66,165,245,.18);
+    --c2b:rgba(102,187,106,.06);--c2d:rgba(102,187,106,.18);
+    --c3b:rgba(255,167,38,.06);--c3d:rgba(255,167,38,.18);
+    --c4b:rgba(171,71,188,.06);--c4d:rgba(171,71,188,.18);
+    --tp:#E8EAF6;--ts:#8E93AD;--tm:#555A72;--border:rgba(255,255,255,.055);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--bg);color:var(--tp);font-family:'Sora',sans-serif;line-height:1.6;overflow-x:hidden;}
+  a{text-decoration:none;color:inherit;}
+  .page{max-width:1100px;margin:0 auto;padding:60px 32px 80px;position:relative;z-index:1;}
+
+  /* BG */
+  .bg-grid{position:fixed;inset:0;background-image:linear-gradient(rgba(255,255,255,.013) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.013) 1px,transparent 1px);background-size:56px 56px;pointer-events:none;z-index:0;}
+  .bg-blob{position:fixed;border-radius:50%;filter:blur(140px);pointer-events:none;z-index:0;}
+  .bg-blob.a{width:500px;height:500px;background:rgba(66,165,245,.045);top:-80px;left:-100px;}
+  .bg-blob.b{width:400px;height:400px;background:rgba(171,71,188,.03);bottom:350px;right:-80px;}
+  .bg-blob.c{width:350px;height:350px;background:rgba(102,187,106,.025);bottom:-30px;left:25%;}
+
+  /* HERO */
+  .hero{text-align:center;margin-bottom:56px;}
+  .hero-badge{display:inline-block;font-family:'Space Mono',monospace;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--c1);border:1px solid var(--c1d);padding:6px 20px;border-radius:40px;background:var(--c1b);margin-bottom:24px;}
+  .hero h1{font-size:clamp(30px,5.5vw,58px);font-weight:800;letter-spacing:-1.5px;line-height:1.1;margin-bottom:16px;background:linear-gradient(135deg,#fff 0%,var(--c1) 30%,var(--c2) 50%,var(--c3) 70%,var(--c4) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+  .hero-sub{font-size:16px;color:var(--ts);max-width:740px;margin:0 auto 24px;line-height:1.75;}
+  .hero-sub strong{color:var(--tp);}
+  .hero-stats{display:flex;justify-content:center;gap:24px;flex-wrap:wrap;}
+  .hero-stat{text-align:center;}
+  .hs-val{font-family:'Space Mono',monospace;font-size:28px;font-weight:700;display:block;}
+  .hs-label{font-size:11px;color:var(--tm);font-family:'Space Mono',monospace;letter-spacing:1px;text-transform:uppercase;}
+  .hs-1 .hs-val{color:var(--c1);} .hs-2 .hs-val{color:var(--c2);} .hs-3 .hs-val{color:var(--c3);} .hs-4 .hs-val{color:var(--c4);}
+
+  /* SECTION */
+  .sec{margin-bottom:40px;}
+  .sec-head{display:flex;align-items:center;gap:14px;margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid var(--border);}
+  .sec-num{font-family:'Space Mono',monospace;font-size:13px;font-weight:700;width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--bg);}
+  .sec-head h2{font-size:22px;font-weight:700;letter-spacing:-.3px;}
+
+  /* TUTORIAL CARD */
+  .tut-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;}
+
+  .tut-card{background:var(--bg-card);border:1px solid var(--border);border-radius:18px;overflow:hidden;transition:transform .25s,box-shadow .25s;display:flex;flex-direction:column;}
+  .tut-card:hover{transform:translateY(-4px);}
+
+  .tc-bar{height:3px;}
+  .tc-body{padding:22px 24px 24px;flex:1;display:flex;flex-direction:column;}
+  .tc-num{font-family:'Space Mono',monospace;font-size:10px;font-weight:700;letter-spacing:1px;margin-bottom:8px;}
+  .tc-body h3{font-size:16px;font-weight:700;margin-bottom:8px;line-height:1.35;}
+  .tc-desc{font-size:13px;color:var(--ts);line-height:1.6;flex:1;margin-bottom:14px;}
+  .tc-link{display:inline-flex;align-items:center;gap:6px;font-family:'Space Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.5px;padding:8px 18px;border-radius:8px;transition:background .2s,color .2s;align-self:flex-start;}
+  .tc-link .arrow{transition:transform .2s;}
+  .tut-card:hover .tc-link .arrow{transform:translateX(3px);}
+
+  /* Color per section */
+  .s1 .tc-bar{background:var(--c1)}.s1 .tc-num{color:var(--c1)}.s1 h3{color:var(--c1)}.s1 .tc-link{background:var(--c1b);border:1px solid var(--c1d);color:var(--c1)}.s1:hover{box-shadow:0 0 40px rgba(66,165,245,.07);}
+  .s2 .tc-bar{background:var(--c2)}.s2 .tc-num{color:var(--c2)}.s2 h3{color:var(--c2)}.s2 .tc-link{background:var(--c2b);border:1px solid var(--c2d);color:var(--c2)}.s2:hover{box-shadow:0 0 40px rgba(102,187,106,.07);}
+  .s3 .tc-bar{background:var(--c3)}.s3 .tc-num{color:var(--c3)}.s3 h3{color:var(--c3)}.s3 .tc-link{background:var(--c3b);border:1px solid var(--c3d);color:var(--c3)}.s3:hover{box-shadow:0 0 40px rgba(255,167,38,.07);}
+  .s4 .tc-bar{background:var(--c4)}.s4 .tc-num{color:var(--c4)}.s4 h3{color:var(--c4)}.s4 .tc-link{background:var(--c4b);border:1px solid var(--c4d);color:var(--c4)}.s4:hover{box-shadow:0 0 40px rgba(171,71,188,.07);}
+
+  /* Getting Started */
+  .gs{background:var(--bg-card);border:1px solid var(--border);border-radius:20px;padding:32px;margin-top:48px;position:relative;overflow:hidden;}
+  .gs::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--c1),var(--c2),var(--c3),var(--c4));}
+  .gs h2{font-size:22px;font-weight:700;margin-bottom:16px;}
+  .gs-steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;}
+  .gs-step{padding:18px 20px;border-radius:14px;background:rgba(255,255,255,.015);border:1px solid var(--border);}
+  .gs-step-num{font-family:'Space Mono',monospace;font-size:10px;font-weight:700;color:var(--c1);letter-spacing:1px;margin-bottom:6px;}
+  .gs-step p{font-size:13px;color:var(--ts);line-height:1.6;}
+  .gs-step code{font-family:'Space Mono',monospace;font-size:12px;color:var(--c2);background:rgba(102,187,106,.06);padding:2px 8px;border-radius:4px;}
+
+  /* Footer */
+  .footer{text-align:center;margin-top:64px;padding-top:28px;border-top:1px solid var(--border);}
+  .footer p{font-family:'Space Mono',monospace;font-size:12px;color:var(--tm);letter-spacing:1px;}
+  .footer .fa{color:var(--c1);}
+  .footer a{color:var(--c1);border-bottom:1px solid rgba(66,165,245,.3);padding-bottom:1px;transition:border-color .2s;}
+  .footer a:hover{border-color:var(--c1);}
+
+  @media(max-width:700px){
+    .tut-grid{grid-template-columns:1fr;}
+    .hero-stats{gap:16px;}
+    .gs-steps{grid-template-columns:1fr;}
+  }
+</style>
 </head>
 <body>
+<div class="bg-grid"></div>
+<div class="bg-blob a"></div>
+<div class="bg-blob b"></div>
+<div class="bg-blob c"></div>
 
-<header>
+<div class="page">
+
+  <!-- ═══ HERO ═══ -->
+  <div class="hero">
+    <div class="hero-badge">Visual Learning · Performance Engineering</div>
     <h1>Apache JMeter Tutorials</h1>
-    <p>A comprehensive guide to Performance Testing and JMeter Mastery</p>
-</header>
-
-<div class="grid">
-    <h2 class="category-title">1. Fundamentals</h2>
-    
-    <div class="card">
-        <h3>Introduction</h3>
-        <p>Core concepts and why performance testing is critical for application success.</p>
-        <a href="PerformanceTestingIntroduction.html">Read Tutorial</a>
+    <p class="hero-sub">
+      A comprehensive collection of <strong>visual infographic guides</strong> designed to help performance testing professionals and beginners master <strong>JMeter</strong> and the core principles of <strong>performance engineering</strong>.
+    </p>
+    <div class="hero-stats">
+      <div class="hero-stat hs-1"><span class="hs-val">14</span><span class="hs-label">Tutorials</span></div>
+      <div class="hero-stat hs-2"><span class="hs-val">4</span><span class="hs-label">Sections</span></div>
+      <div class="hero-stat hs-3"><span class="hs-val">100+</span><span class="hs-label">Concepts</span></div>
+      <div class="hero-stat hs-4"><span class="hs-val">∞</span><span class="hs-label">Learning</span></div>
     </div>
+  </div>
 
-    <div class="card">
-        <h3>Testing Types</h3>
-        <p>Learn about Load, Stress, Endurance, and Spike testing methodologies.</p>
-        <a href="TypesOfPerformanceTesting.html">Read Tutorial</a>
+  <!-- ═══ SECTION 1: FUNDAMENTALS ═══ -->
+  <div class="sec">
+    <div class="sec-head">
+      <div class="sec-num" style="background:var(--c1)">01</div>
+      <h2 style="color:var(--c1)">Fundamentals of Performance Testing</h2>
     </div>
+    <div class="tut-grid">
 
-    <div class="card">
-        <h3>Terminologies</h3>
-        <p>Master key metrics: Latency, Throughput, and Response Times.</p>
-        <a href="PerformanceTestingTerminologies.html">Read Tutorial</a>
+      <a href="PerformanceTestingIntroduction.html" class="tut-card s1">
+        <div class="tc-bar"></div>
+        <div class="tc-body">
+          <div class="tc-num">01 · FUNDAMENTALS</div>
+          <h3>Introduction to Performance Testing</h3>
+          <div class="tc-desc">Core concepts — what performance testing is, why it matters, focus areas, real-world examples, and the importance of testing before go-live.</div>
+          <span class="tc-link">View Guide <span class="arrow">→</span></span>
+        </div>
+      </a>
+
+      <a href="TypesOfPerformanceTesting.html" class="tut-card s1">
+        <div class="tc-bar"></div>
+        <div class="tc-body">
+          <div class="tc-num">02 · FUNDAMENTALS</div>
+          <h3>Types of Performance Testing</h3>
+          <div class="tc-desc">Load, Stress, Soak, Spike, and Break-Point testing — specific load conditions and purpose of each type.</div>
+          <span class="tc-link">View Guide <span class="arrow">→</span></span>
+        </div>
+      </a>
+
+      <a href="PerformanceTestingTerminologies.html" class="tut-card s1">
+        <div class="tc-bar"></div>
+        <div class="tc-body">
+          <div class="tc-num">03 · FUNDAMENTALS</div>
+          <h3>Performance Testing Terminologies</h3>
+          <div class="tc-desc">Virtual Users, Response Time, Throughput, Requests, Transactions, Iterations, Think Time, and Pacing — all connected.</div>
+          <span class="tc-link">View Guide <span class="arrow">→</span></span>
+        </div>
+      </a>
+
+      <a href="PerformanceTestingSLAs.html" class="tut-card s1">
+        <div class="tc-bar"></div>
+        <div class="tc-body">
+          <div class="tc-num">04 · FUNDAMENTALS</div>
+          <h3>Performance Testing SLAs</h3>
+          <div class="tc-desc">Service Level Agreements — defining pass/fail criteria, response time thresholds, error rates, throughput targets, and measurement intervals.</div>
+          <span class="tc-link">View Guide <span class="arrow">→</span></span>
+        </div>
+      </a>
+
     </div>
+  </div>
 
-    <div class="card">
-        <h3>SLAs & Goals</h3>
-        <p>Defining non-functional requirements and Service Level Agreements.</p>
-        <a href="PerformanceTestingSLAs.html">Read Tutorial</a>
+  <!-- ═══ SECTION 2: STRATEGY & LIFECYCLE ═══ -->
+  <div class="sec">
+    <div class="sec-head">
+      <div class="sec-num" style="background:var(--c2)">02</div>
+      <h2 style="color:var(--c2)">Strategy & Lifecycle</h2>
     </div>
+    <div class="tut-grid">
 
-    <h2 class="category-title">2. Strategy & Lifecycle</h2>
+      <a href="PerformanceTestingLifeCycle.html" class="tut-card s2">
+        <div class="tc-bar"></div>
+        <div class="tc-body">
+          <div class="tc-num">05 · STRATEGY</div>
+          <h3>Performance Testing Life Cycle (PTLC)</h3>
+          <div class="tc-desc">7 phases from Risk Assessment to Reporting — the end-to-end systematic process for performance testing.</div>
+          <span class="tc-link">View Guide <span class="arrow">→</span></span>
+        </div>
+      </a>
 
-    <div class="card">
-        <h3>Testing Lifecycle</h3>
-        <p>The PTLC: from requirement gathering to the final sign-off.</p>
-        <a href="PerformanceTestingLifeCycle.html">Read Tutorial</a>
+      <a href="WorkloadModelling&Little'sLaw.html" class="tut-card s2">
+        <div class="tc-bar"></div>
+        <div class="tc-body">
+          <div class="tc-num">06 · STRATEGY</div>
+          <h3>Workload Modelling & Little's Law</h3>
+          <div class="tc-desc">Users = Iterations/sec × Pacing — mathematical approaches to sizing virtual users, open vs closed models, and JMeter mapping.</div>
+          <span class="tc-link">View Guide <span class="arrow">→</span></span>
+        </div>
+      </a>
+
+      <a href="CommonPerformanceProblems.html" class="tut-card s2">
+        <div class="tc-bar"></div>
+        <div class="tc-body">
+          <div class="tc-num">07 · STRATEGY</div>
+          <h3>Common Performance Problems</h3>
+          <div class="tc-desc">7 frequent issues — reduced throughput, poor response time, scalability failures, heap problems, thread pool issues, and slow DB queries.</div>
+          <span class="tc-link">View Guide <span class="arrow">→</span></span>
+        </div>
+      </a>
+
     </div>
+  </div>
 
-    <div class="card">
-        <h3>Workload Modelling</h3>
-        <p>Applying Little's Law to calculate users, pacing, and throughput.</p>
-        <a href="WorkloadModelling&Little'sLaw.html">Read Tutorial</a>
+  <!-- ═══ SECTION 3: MASTERING JMETER ═══ -->
+  <div class="sec">
+    <div class="sec-head">
+      <div class="sec-num" style="background:var(--c3)">03</div>
+      <h2 style="color:var(--c3)">Mastering Apache JMeter</h2>
     </div>
+    <div class="tut-grid">
 
-    <div class="card">
-        <h3>Common Problems</h3>
-        <p>Identifying bottlenecks like memory leaks and high CPU usage.</p>
-        <a href="CommonPerformanceProblems.html">Read Tutorial</a>
+      <a href="ApacheJMeterInstallation.html" class="tut-card s3">
+        <div class="tc-bar"></div>
+        <div class="tc-body">
+          <div class="tc-num">08 · JMETER</div>
+          <h3>JMeter Installation</h3>
+          <div class="tc-desc">Step-by-step installation on macOS (Homebrew & manual) and Windows — Java setup, environment variables, and verification.</div>
+          <span class="tc-link">View Guide <span class="arrow">→</span></span>
+        </div>
+      </a>
+
+      <a href="ApacheJMeterScriptingSteps.html" class="tut-card s3">
+        <div class="tc-bar"></div>
+        <div class="tc-body">
+          <div class="tc-num">09 · JMETER</div>
+          <h3>JMeter Scripting Steps</h3>
+          <div class="tc-desc">6-step scripting process — setup, test plan, samplers, enhancement (correlation, parameterization, assertions), debugging, and execution.</div>
+          <span class="tc-link">View Guide <span class="arrow">→</span></span>
+        </div>
+      </a>
+
+      <a href="RecordScriptsApacheJMeter.html" class="tut-card s3">
+        <div class="tc-bar"></div>
+        <div class="tc-body">
+          <div class="tc-num">10 · JMETER</div>
+          <h3>Recording Scripts</h3>
+          <div class="tc-desc">7 methods — built-in recorder, BlazeMeter extension, HAR conversion, Fiddler/Charles, manual scripting, Swagger import, and Selenium integration.</div>
+          <span class="tc-link">View Guide <span class="arrow">→</span></span>
+        </div>
+      </a>
+
+      <a href="TestElementsExecutionOrder.html" class="tut-card s3">
+        <div class="tc-bar"></div>
+        <div class="tc-body">
+          <div class="tc-num">11 · JMETER</div>
+          <h3>Test Elements Execution Order</h3>
+          <div class="tc-desc">The 9-element execution sequence — Test Plan → Config → Thread Group → Pre → Timer → Sampler → Post → Assertion → Listener.</div>
+          <span class="tc-link">View Guide <span class="arrow">→</span></span>
+        </div>
+      </a>
+
     </div>
+  </div>
 
-    <h2 class="category-title">3. JMeter Hands-on</h2>
-
-    <div class="card">
-        <h3>Installation</h3>
-        <p>Step-by-step setup guide for JMeter on your local machine.</p>
-        <a href="ApacheJMeterInstallation.html">Read Tutorial</a>
+  <!-- ═══ SECTION 4: EXECUTION & RESULTS ═══ -->
+  <div class="sec">
+    <div class="sec-head">
+      <div class="sec-num" style="background:var(--c4)">04</div>
+      <h2 style="color:var(--c4)">Execution & Results Analysis</h2>
     </div>
+    <div class="tut-grid">
 
-    <div class="card">
-        <h3>Scripting Steps</h3>
-        <p>The standardized workflow for building any performance test plan.</p>
-        <a href="ApacheJMeterScriptingSteps.html">Read Tutorial</a>
+      <a href="JMeterNon-GUIModeCommand.html" class="tut-card s4">
+        <div class="tc-bar"></div>
+        <div class="tc-body">
+          <div class="tc-num">12 · EXECUTION</div>
+          <h3>Non-GUI Mode Commands</h3>
+          <div class="tc-desc">The essential CLI command for load testing — breakdown of every parameter: -n, -t, -l, -e, -o with full working examples.</div>
+          <span class="tc-link">View Guide <span class="arrow">→</span></span>
+        </div>
+      </a>
+
+      <a href="PerformanceTestingMonitoring.html" class="tut-card s4">
+        <div class="tc-bar"></div>
+        <div class="tc-body">
+          <div class="tc-num">13 · EXECUTION</div>
+          <h3>Performance Testing Monitoring</h3>
+          <div class="tc-desc">Three monitoring pillars — client-side metrics (RT, throughput, errors), server-side (CPU, memory, disk), and APM (DB queries, GC, cache).</div>
+          <span class="tc-link">View Guide <span class="arrow">→</span></span>
+        </div>
+      </a>
+
+      <a href="AnalyseApacheJMeterHtmlReportAnalysis.html" class="tut-card s4">
+        <div class="tc-bar"></div>
+        <div class="tc-body">
+          <div class="tc-num">14 · EXECUTION</div>
+          <h3>HTML Report Analysis</h3>
+          <div class="tc-desc">Interpreting JMeter's dashboard — APDEX scores, statistics table, percentiles, over-time charts, throughput analysis, and saturation detection.</div>
+          <span class="tc-link">View Guide <span class="arrow">→</span></span>
+        </div>
+      </a>
+
     </div>
+  </div>
 
-    <div class="card">
-        <h3>Recording Scripts</h3>
-        <p>Using the HTTP(S) Test Script Recorder for rapid script development.</p>
-        <a href="RecordScriptsApacheJMeter.html">Read Tutorial</a>
+  <!-- ═══ GETTING STARTED ═══ -->
+  <div class="gs">
+    <h2>🚀 Getting Started</h2>
+    <div class="gs-steps">
+      <div class="gs-step">
+        <div class="gs-step-num">STEP 1</div>
+        <p>Clone the repository:<br><code>git clone https://github.com/angshumanbasak/Apache-JMeter-Tutorials.git</code></p>
+      </div>
+      <div class="gs-step">
+        <div class="gs-step-num">STEP 2</div>
+        <p>Open any <code>.html</code> file directly in your browser — or browse them right here on this site.</p>
+      </div>
+      <div class="gs-step">
+        <div class="gs-step-num">STEP 3</div>
+        <p>Start with <strong>Fundamentals</strong> if you're new, or jump to <strong>Mastering JMeter</strong> for hands-on scripting.</p>
+      </div>
     </div>
+  </div>
 
-    <div class="card">
-        <h3>Execution Order</h3>
-        <p>Understanding scoping and precedence of JMeter elements.</p>
-        <a href="TestElementsExecutionOrder.html">Read Tutorial</a>
-    </div>
+  <!-- FOOTER -->
+  <div class="footer">
+    <p><span class="fa">APACHE JMETER TUTORIALS</span> &middot; Built by <a href="https://github.com/angshumanbasak" target="_blank" rel="noopener">Angshuman Basak</a> &middot; Performance Engineering</p>
+  </div>
 
-    <h2 class="category-title">4. Execution & Analysis</h2>
-
-    <div class="card">
-        <h3>CLI / Non-GUI Mode</h3>
-        <p>Executing tests via command line for optimal resource usage.</p>
-        <a href="JMeterNon-GUIModeCommand.html">Read Tutorial</a>
-    </div>
-
-    <div class="card">
-        <h3>Monitoring</h3>
-        <p>Tracking server health and resource utilization during runs.</p>
-        <a href="PerformanceTestingMonitoring.html">Read Tutorial</a>
-    </div>
-
-    <div class="card">
-        <h3>HTML Report Analysis</h3>
-        <p>Deep dive into interpreting the JMeter Dashboard Report.</p>
-        <a href="AnalyseApacheJMeterHtmlReportAnalysis.html">Read Tutorial</a>
-    </div>
 </div>
-
-<footer>
-    <p>Maintained by <a href="https://github.com/angshumanbasak" style="background:none; color:#0366d6; padding:0;">Angshuman Basak</a></p>
-    <p>&copy; 2026 Apache JMeter Tutorials Project</p>
-</footer>
-
 </body>
 </html>
